@@ -1984,109 +1984,56 @@
 </div>
 
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx - 6 + 'px';
-    cursor.style.top = my - 6 + 'px';
-  });
-
-  function animateRing() {
-    rx += (mx - rx - 18) * 0.12;
-    ry += (my - ry - 18) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
-
-  document.querySelectorAll('button, a').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'scale(2)';
-      ring.style.transform = 'scale(1.5)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'scale(1)';
-      ring.style.transform = 'scale(1)';
-    });
-  });
-
   // Countdown
   const targetDate = new Date('2026-01-21T18:00:00').getTime();
   function updateCountdown() {
     const now = new Date().getTime();
     const diff = targetDate - now;
-    if (diff <= 0) return;
-    document.getElementById('cd-days').textContent = String(Math.floor(diff / 86400000)).padStart(2,'0');
+    if (diff <= 0) {
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
+    document.getElementById('cd-days').textContent  = String(Math.floor(diff / 86400000)).padStart(2,'0');
     document.getElementById('cd-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2,'0');
-    document.getElementById('cd-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
-    document.getElementById('cd-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
+    document.getElementById('cd-secs').textContent  = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
-  // Ticket selector
-  const prices = {1: '$4.990', 3: '$12.990', 5: '$19.990', 10: '$34.990'};
+  // Format CLP
+  function fmt(n) { return '$' + n.toLocaleString('es-CL'); }
+
+  // Ticket selector (hero)
   let featuredQty = 1;
   function selectTickets(el, qty) {
     document.querySelectorAll('.ticket-opt').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
     featuredQty = qty;
-    document.querySelector('.buy-btn').textContent = `COMPRAR ${qty} TICKET${qty>1?'S':''} — ${prices[qty]}`;
+    document.querySelector('.buy-btn').textContent = 'COMPRAR ' + qty + ' TICKET' + (qty>1?'S':'') + ' — ' + fmt(4990 * qty);
   }
   function buyFeatured() {
     openModal('Viaje por Europa 21 días', 4990);
-    // Auto-select the qty chosen in ticket selector
-    setTimeout(() => {
-      const btns = document.querySelectorAll('.mqg-btn');
-      const qtyMap = [1,3,5,10];
-      btns.forEach((b,i) => {
-        b.classList.toggle('active', qtyMap[i] === featuredQty);
-      });
-      const total = 4990 * featuredQty;
-      updateModalSummary(featuredQty, total);
-    }, 50);
   }
 
-  // ===== MERCADOPAGO LINKS =====
-  const mpLinks = {
-    'MacBook Pro 16" M3 Max': 'https://mpago.la/1Vign3U',
-    'PlayStation 5 Pro':      'https://mpago.la/23A1V8a',
-    'iPhone 16 Pro Max':      'https://mpago.la/2HGHnJm',
-    'Setup Gamer Pro':        'https://mpago.la/1b7QXa2',
-  };
-
-  // ===== PAYMENT MODAL =====
-  const modalPrices = {1: 1, 3: 3, 5: 5, 10: 10};
+  // Modal
   let currentUnitPrice = 4990;
-  let currentQty = 3;
-  let currentPrizeName = 'MacBook Pro 16" M3 Max';
-
-  function fmt(n) {
-    return '$' + n.toLocaleString('es-CL');
-  }
+  let currentQty = 1;
 
   function openModal(prizeName, unitPrice) {
-    currentPrizeName = prizeName;
     currentUnitPrice = unitPrice;
     currentQty = 1;
-
     const sel = document.getElementById('modalQtySelector');
     sel.innerHTML = '';
     const btn = document.createElement('button');
     btn.className = 'mqg-btn active';
     btn.style.gridColumn = '1 / -1';
-    btn.innerHTML = `<span class="mqg-qty">x1 ticket</span><span class="mqg-price">${fmt(unitPrice)}</span><span class="mqg-badge">DISPONIBLE</span>`;
+    btn.innerHTML = '<span class="mqg-qty">x1 ticket</span><span class="mqg-price">' + fmt(unitPrice) + '</span><span class="mqg-badge">DISPONIBLE</span>';
     sel.appendChild(btn);
-
     document.getElementById('modalPrizeName').textContent = '// ' + prizeName;
     document.getElementById('summaryPrizeName').textContent = prizeName;
-    updateModalSummary(1, unitPrice);
-
+    document.getElementById('summaryQtyLabel').textContent = 'Tickets seleccionados (x1)';
+    document.getElementById('webpayAmount').textContent = fmt(unitPrice);
     document.getElementById('modalFormView').style.display = '';
     document.getElementById('modalSuccess').style.display = 'none';
     document.getElementById('paymentModal').classList.add('open');
@@ -2102,43 +2049,26 @@
     if (e.target === this) closeModal();
   });
 
-  function updateModalSummary(qty, total) {
-    currentQty = qty;
-    document.getElementById('summaryQtyLabel').textContent = `Tickets seleccionados (x${qty})`;
-    document.getElementById('summarySubtotal').textContent = fmt(total);
-    document.getElementById('summaryTotal').textContent = fmt(total);
-    document.getElementById('webpayAmount').textContent = fmt(total);
-  }
-
-  function setModalQty(el, qty, priceStr, total) {
-    document.querySelectorAll('.mqg-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    updateModalSummary(qty, total);
-  }
-
   function processPayment() {
-    const name = document.getElementById('buyerName').value.trim();
+    const name  = document.getElementById('buyerName').value.trim();
     const email = document.getElementById('buyerEmail').value.trim();
-    if (!name || !email) {
-      document.getElementById('buyerName').style.borderColor = name ? 'var(--border)' : 'var(--accent3)';
-      document.getElementById('buyerEmail').style.borderColor = email ? 'var(--border)' : 'var(--accent3)';
-      return;
-    }
+    if (!name)  { document.getElementById('buyerName').style.borderColor  = 'var(--fire)'; }
+    if (!email) { document.getElementById('buyerEmail').style.borderColor = 'var(--fire)'; }
+    if (!name || !email) return;
     document.getElementById('modalFormView').style.display = 'none';
     document.getElementById('modalSuccess').style.display = 'block';
     document.getElementById('successEmail').textContent = email;
-    document.getElementById('mpRedirectBtn').click();
+    setTimeout(function() {
+      window.open('https://mpago.la/12ho2db', '_blank');
+    }, 800);
   }
 
-  // ===== CHECKOUT SECTION =====
-  let coUnitPrice = 4990;
-
+  // Checkout
   function selectCheckoutPrize(el, name, unit, total) {
     document.querySelectorAll('.checkout-prize-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
-    coUnitPrice = unit;
-    document.getElementById('checkoutSummaryName').textContent = name;
-    document.getElementById('checkoutSummaryUnit').textContent = fmt(unit);
+    document.getElementById('checkoutSummaryName').textContent  = name;
+    document.getElementById('checkoutSummaryUnit').textContent  = fmt(unit);
     document.getElementById('checkoutSummaryTotal').textContent = fmt(unit);
     document.getElementById('checkoutWebpayAmount').textContent = fmt(unit);
   }
@@ -2149,64 +2079,52 @@
   }
 
   function checkoutPay() {
+    const name  = document.getElementById('coName').value.trim();
     const email = document.getElementById('coEmail').value.trim();
-    const name = document.getElementById('coName').value.trim();
+    if (!name)  { document.getElementById('coName').style.borderColor  = 'var(--fire)'; }
+    if (!email) { document.getElementById('coEmail').style.borderColor = 'var(--fire)'; }
     if (!name || !email) {
-      document.getElementById('coName').style.borderColor = name ? 'var(--border)' : 'var(--accent3)';
-      document.getElementById('coEmail').style.borderColor = email ? 'var(--border)' : 'var(--accent3)';
       document.getElementById('coName').scrollIntoView({behavior:'smooth', block:'center'});
       return;
     }
     const btn = document.querySelector('#checkout .co-pay-btn');
     btn.querySelector('.co-pay-action').textContent = 'REDIRIGIENDO... →';
-    btn.style.background = 'linear-gradient(135deg,#00c4ff,#009ee3)';
-    // Get selected prize name
-    const selectedPrize = document.querySelector('.checkout-prize-option.selected');
-    const prizeName = selectedPrize ? selectedPrize.dataset.name : 'MacBook Pro 16" M3 Max';
-    const link = mpLinks[prizeName] || mpLinks['Viaje por Europa 21 días'];
-    setTimeout(() => { window.location.href = link; }, 900);
+    setTimeout(function() {
+      window.open('https://mpago.la/12ho2db', '_blank');
+    }, 600);
   }
 
-  // Add checkout link to nav
-  document.querySelector('.nav-links').insertAdjacentHTML('beforeend',
-    '<li><a href="#checkout">Checkout</a></li>'
-  );
-
-
+  // Counter animation
   function animateCounter(el) {
     const target = parseInt(el.dataset.target);
     if (!target) return;
     let current = 0;
     const step = target / 60;
-    const suffix = el.textContent.includes('%') ? '%' : '';
-    const timer = setInterval(() => {
+    const suffix = el.getAttribute('data-suffix') || '';
+    const timer = setInterval(function() {
       current = Math.min(current + step, target);
       el.textContent = Math.floor(current).toLocaleString('es-CL') + suffix;
       if (current >= target) clearInterval(timer);
     }, 25);
   }
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        animateCounter(e.target);
-        observer.unobserve(e.target);
-      }
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { animateCounter(e.target); observer.unobserve(e.target); }
     });
   }, { threshold: 0.5 });
+  document.querySelectorAll('[data-target]').forEach(function(el) { observer.observe(el); });
 
-  document.querySelectorAll('[data-target]').forEach(el => observer.observe(el));
-
-  // Winners filter tabs
+  // Winners filter
   function filterWinners(tab, cat) {
     document.querySelectorAll('.wtab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    document.querySelectorAll('.winner-row').forEach(row => {
+    document.querySelectorAll('.winner-row').forEach(function(row) {
       row.style.display = (cat === 'all' || row.dataset.cat === cat) ? '' : 'none';
     });
   }
-</script>
 
-<a id="mpRedirectBtn" href="https://mpago.la/12ho2db" style="display:none;" target="_blank" rel="noopener noreferrer"></a>
+  // Nav checkout link
+  document.querySelector('.nav-links').insertAdjacentHTML('beforeend','<li><a href="#checkout">Checkout</a></li>');
+</script>
 </body>
 </html>
