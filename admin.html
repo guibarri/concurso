@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLTEX — Panel Admin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap');
+
+  :root {
+    --fire: #ff4d00;
+    --magenta: #e8006f;
+    --cobalt: #0066ff;
+    --ice: #00d4ff;
+    --gold: #f5c400;
+    --green: #00e676;
+    --grad-main: linear-gradient(135deg, #ff4d00, #e8006f);
+    --text: #f5f0ff;
+    --muted: #6a6680;
+    --muted2: #9990bb;
+    --bg: #0a0514;
+    --card: rgba(18,6,36,0.9);
+    --border: rgba(255,255,255,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(255,77,0,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 85% 5%, rgba(232,0,111,0.14) 0%, transparent 50%),
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(100,0,180,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 60% at 5% 80%, rgba(0,80,255,0.14) 0%, transparent 55%),
+      linear-gradient(160deg, #0e0418 0%, #08021a 35%, #04071e 65%, #0a0514 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,77,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(100,0,200,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  /* ===== LOGIN ===== */
+  #loginScreen {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .login-box {
+    background: rgba(11,4,26,0.97);
+    border: 1px solid rgba(255,77,0,0.25);
+    padding: 56px 48px;
+    width: 100%; max-width: 420px;
+    position: relative;
+    box-shadow: 0 0 80px rgba(255,77,0,0.12);
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .login-corner { position: absolute; width: 16px; height: 16px; }
+  .login-corner.tl { top:-1px; left:-1px; border-top:2px solid var(--fire); border-left:2px solid var(--fire); }
+  .login-corner.tr { top:-1px; right:-1px; border-top:2px solid var(--fire); border-right:2px solid var(--fire); }
+  .login-corner.bl { bottom:-1px; left:-1px; border-bottom:2px solid var(--magenta); border-left:2px solid var(--magenta); }
+  .login-corner.br { bottom:-1px; right:-1px; border-bottom:2px solid var(--magenta); border-right:2px solid var(--magenta); }
+
+  .login-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.62rem; color: var(--fire);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 8px; opacity: 0.8;
+  }
+  .login-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem; letter-spacing: 0.04em;
+    margin-bottom: 36px;
+  }
+  .login-title span {
+    background: var(--grad-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .login-field { margin-bottom: 16px; }
+  .login-field label {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.6rem; color: var(--muted);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    display: block; margin-bottom: 6px;
+  }
+  .login-field input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text); padding: 13px 16px;
+    font-family: 'Fira Code', monospace; font-size: 0.9rem;
+    outline: none; transition: all 0.2s;
+  }
+  .login-field input:focus {
+    border-color: rgba(255,77,0,0.5);
+    background: rgba(255,77,0,0.04);
+    box-shadow: 0 0 0 3px rgba(255,77,0,0.08);
+  }
+
+  .login-btn {
+    width: 100%; margin-top: 24px;
+    background: var(--grad-main);
+    color: #fff; border: none; padding: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; letter-spacing: 0.12em;
+    cursor: pointer;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.3s;
+    box-shadow: 0 8px 24px rgba(255,77,0,0.3);
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(255,77,0,0.45); }
+
+  .login-error {
+    margin-top: 12px; text-align: center;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.72rem; color: var(--magenta);
+    display: none;
+  }
+
+  /* ===== DASHBOARD ===== */
+  #dashboard { display: none; position: relative; z-index: 1; }
+
+  /* NAV */
+  .admin-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(5,5,13,0.9);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,77,0,0.15);
+    padding: 16px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .admin-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem; letter-spacing: 0.08em;
+  }
+  .admin-logo span {
+    background: var(--grad-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .admin-badge {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.62rem; color: var(--fire);
+    border: 1px solid rgba(255,77,0,0.3);
+    padding: 4px 12px; letter-spacing: 0.15em;
+  }
+  .logout-btn {
+    background: transparent;
+    border: 1px solid rgba(255,77,0,0.3);
+    color: var(--muted2); padding: 8px 20px;
+    font-family: 'Fira Code', monospace; font-size: 0.72rem;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.08em;
+  }
+  .logout-btn:hover { border-color: var(--fire); color: var(--fire); }
+
+  /* STATS */
+  .admin-stats {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 2px; background: rgba(255,77,0,0.06);
+    margin: 32px 40px;
+    border: 1px solid rgba(255,77,0,0.12);
+  }
+  .admin-stat {
+    background: var(--card);
+    padding: 28px 32px;
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .admin-stat:hover { border-left-color: var(--fire); }
+  .admin-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem; letter-spacing: 0.04em;
+    background: var(--grad-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: block;
+  }
+  .admin-stat-lbl {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.62rem; color: var(--muted2);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 4px; display: block;
+  }
+
+  /* TABLE SECTION */
+  .admin-table-wrap {
+    margin: 0 40px 40px;
+    border: 1px solid rgba(255,77,0,0.14);
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(255,77,0,0.05);
+  }
+
+  .table-header {
+    background: rgba(11,4,26,0.95);
+    padding: 20px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,77,0,0.12);
+  }
+  .table-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; letter-spacing: 0.04em;
+  }
+  .table-title span {
+    background: var(--grad-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .refresh-btn {
+    background: rgba(255,77,0,0.1);
+    border: 1px solid rgba(255,77,0,0.3);
+    color: var(--fire); padding: 8px 20px;
+    font-family: 'Fira Code', monospace; font-size: 0.72rem;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.08em;
+  }
+  .refresh-btn:hover { background: rgba(255,77,0,0.2); }
+
+  .search-input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text); padding: 8px 16px;
+    font-family: 'Fira Code', monospace; font-size: 0.78rem;
+    outline: none; width: 220px; transition: all 0.2s;
+  }
+  .search-input:focus { border-color: rgba(255,77,0,0.4); }
+  .search-input::placeholder { color: var(--muted); }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    background: rgba(10,4,22,0.9);
+  }
+  thead tr {
+    border-bottom: 1px solid rgba(255,77,0,0.15);
+    background: rgba(255,77,0,0.04);
+  }
+  th {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.62rem; color: var(--fire);
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 14px 20px; text-align: left; font-weight: 400;
+  }
+  tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+  }
+  tbody tr:hover { background: rgba(255,77,0,0.04); }
+  td {
+    padding: 14px 20px;
+    font-size: 0.84rem; color: var(--muted2);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  td.name { color: var(--text); font-weight: 600; }
+  td.amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 0.04em;
+    background: var(--grad-main);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  td.date { font-family: 'Fira Code', monospace; font-size: 0.72rem; }
+
+  .status-badge {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border: 1px solid rgba(0,230,118,0.4);
+    color: var(--green);
+    background: rgba(0,230,118,0.06);
+  }
+
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    color: var(--muted);
+    font-family: 'Fira Code', monospace; font-size: 0.82rem;
+  }
+  .empty-state .icon { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+
+  .loading {
+    text-align: center; padding: 40px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.78rem; color: var(--fire);
+    letter-spacing: 0.1em;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  @media (max-width: 768px) {
+    .admin-stats { grid-template-columns: 1fr 1fr; margin: 16px; }
+    .admin-table-wrap { margin: 0 16px 32px; overflow-x: auto; }
+    .admin-nav { padding: 14px 16px; }
+    table { min-width: 600px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-corner tl"></div>
+    <div class="login-corner tr"></div>
+    <div class="login-corner bl"></div>
+    <div class="login-corner br"></div>
+    <div class="login-label">// VOLTEX_ADMIN_v1.0</div>
+    <h1 class="login-title">Panel <span>Admin</span></h1>
+    <div class="login-field">
+      <label>Usuario</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">→ INGRESAR AL PANEL</button>
+    <div class="login-error" id="loginError">❌ Usuario o contraseña incorrectos</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <nav class="admin-nav">
+    <div style="display:flex;align-items:center;gap:20px">
+      <span class="admin-logo">VOLT<span>EX</span></span>
+      <span class="admin-badge">// PANEL ADMIN</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <input class="search-input" type="text" placeholder="Buscar por nombre o email..." oninput="filterTable(this.value)" id="searchInput">
+      <button class="refresh-btn" onclick="loadData()">↻ ACTUALIZAR</button>
+      <button class="logout-btn" onclick="doLogout()">SALIR</button>
+    </div>
+  </nav>
+
+  <div class="admin-stats">
+    <div class="admin-stat">
+      <span class="admin-stat-val" id="statTotal">0</span>
+      <span class="admin-stat-lbl">Total registros</span>
+    </div>
+    <div class="admin-stat">
+      <span class="admin-stat-val" id="statHoy">0</span>
+      <span class="admin-stat-lbl">Registros hoy</span>
+    </div>
+    <div class="admin-stat">
+      <span class="admin-stat-val" id="statMonto">$0</span>
+      <span class="admin-stat-lbl">Monto total</span>
+    </div>
+    <div class="admin-stat">
+      <span class="admin-stat-val" id="statUltimo">—</span>
+      <span class="admin-stat-lbl">Último registro</span>
+    </div>
+  </div>
+
+  <div class="admin-table-wrap">
+    <div class="table-header">
+      <div class="table-title">Registros de <span>participantes</span></div>
+      <span style="font-family:'Fira Code',monospace;font-size:0.62rem;color:var(--muted);letter-spacing:0.1em" id="lastUpdate"></span>
+    </div>
+    <div id="tableContainer">
+      <div class="loading">// CARGANDO DATOS...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== CREDENCIALES (cámbialas aquí) =====
+  const ADMIN_USER = 'voltex';
+  const ADMIN_PASS = 'europa2025';
+
+  // ===== SHEETS API URL =====
+  const SHEETS_API = 'https://script.google.com/macros/s/AKfycby9dj4BIeKew4zFLrMIJcadq-t05gv62XCSX_mU1t9B5dbiPDOSFU8bKUasEl6z2wXt/exec';
+
+  // ===== ID de la hoja =====
+  const SHEET_ID = '10AWSo35NTTUr2OvtcJHBC6NwhQxhGUlyKfkBLZ_Zpag';
+
+  let allRows = [];
+
+  // LOGIN
+  function doLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadData();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('loginPass').style.borderColor = 'var(--magenta)';
+      setTimeout(() => {
+        document.getElementById('loginError').style.display = 'none';
+        document.getElementById('loginPass').style.borderColor = '';
+      }, 2500);
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    allRows = [];
+  }
+
+  // LOAD DATA from Google Sheets via public CSV export
+  function loadData() {
+    document.getElementById('tableContainer').innerHTML = '<div class="loading">// CARGANDO DATOS...</div>';
+    const url = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=Hoja1';
+    fetch(url)
+      .then(r => r.text())
+      .then(csv => {
+        allRows = parseCSV(csv);
+        renderTable(allRows);
+        updateStats(allRows);
+        document.getElementById('lastUpdate').textContent = '// actualizado: ' + new Date().toLocaleTimeString('es-CL');
+      })
+      .catch(() => {
+        // If fetch fails show demo data hint
+        document.getElementById('tableContainer').innerHTML =
+          '<div class="empty-state"><span class="icon">📋</span>Aún no hay registros. Los participantes aparecerán aquí cuando completen el pago.</div>';
+        updateStats([]);
+      });
+  }
+
+  function parseCSV(csv) {
+    const lines = csv.trim().split('\n');
+    return lines.map(line => {
+      const cols = [];
+      let cur = ''; let inQ = false;
+      for (let c of line) {
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += c; }
+      }
+      cols.push(cur.trim());
+      return cols;
+    }).filter(r => r.length >= 3 && r[0]);
+  }
+
+  function renderTable(rows) {
+    if (!rows.length) {
+      document.getElementById('tableContainer').innerHTML =
+        '<div class="empty-state"><span class="icon">📋</span>Aún no hay registros de participantes.</div>';
+      return;
+    }
+    let html = '<table><thead><tr><th>#</th><th>Fecha</th><th>Nombre</th><th>Email</th><th>Sorteo</th><th>Monto</th><th>Estado</th></tr></thead><tbody>';
+    rows.slice().reverse().forEach((r, i) => {
+      const fecha = r[0] ? new Date(r[0]).toLocaleString('es-CL') : r[0];
+      html += '<tr>' +
+        '<td class="date">' + (rows.length - i) + '</td>' +
+        '<td class="date">' + (fecha || '—') + '</td>' +
+        '<td class="name">' + (r[1] || '—') + '</td>' +
+        '<td>' + (r[2] || '—') + '</td>' +
+        '<td>' + (r[3] || '—') + '</td>' +
+        '<td class="amount">' + (r[4] || '—') + '</td>' +
+        '<td><span class="status-badge">✓ REGISTRADO</span></td>' +
+        '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('tableContainer').innerHTML = html;
+  }
+
+  function updateStats(rows) {
+    const today = new Date().toDateString();
+    const hoy = rows.filter(r => r[0] && new Date(r[0]).toDateString() === today).length;
+    const monto = rows.reduce((sum, r) => {
+      const m = parseInt((r[4] || '0').replace(/[^0-9]/g, ''));
+      return sum + (isNaN(m) ? 0 : m);
+    }, 0);
+    const ultimo = rows.length ? (rows[rows.length-1][1] || '—') : '—';
+    document.getElementById('statTotal').textContent = rows.length;
+    document.getElementById('statHoy').textContent = hoy;
+    document.getElementById('statMonto').textContent = '$' + monto.toLocaleString('es-CL');
+    document.getElementById('statUltimo').textContent = ultimo.split(' ')[0] || '—';
+  }
+
+  function filterTable(q) {
+    if (!q) { renderTable(allRows); return; }
+    const filtered = allRows.filter(r =>
+      (r[1] || '').toLowerCase().includes(q.toLowerCase()) ||
+      (r[2] || '').toLowerCase().includes(q.toLowerCase())
+    );
+    renderTable(filtered);
+  }
+
+  // Enter key on login
+  document.getElementById('loginUser').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('loginPass').focus();
+  });
+</script>
+</body>
+</html>
