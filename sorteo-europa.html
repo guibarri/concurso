@@ -2058,9 +2058,8 @@
     document.getElementById('modalFormView').style.display = 'none';
     document.getElementById('modalSuccess').style.display = 'block';
     document.getElementById('successEmail').textContent = email;
-    setTimeout(function() {
-      window.open('https://mpago.la/12ho2db', '_blank');
-    }, 800);
+    const win1 = window.open('https://mpago.la/12ho2db', '_blank');
+    if (!win1) { window.location.href = 'https://mpago.la/12ho2db'; }
   }
 
   // Checkout
@@ -2089,9 +2088,8 @@
     }
     const btn = document.querySelector('#checkout .co-pay-btn');
     btn.querySelector('.co-pay-action').textContent = 'REDIRIGIENDO... →';
-    setTimeout(function() {
-      window.open('https://mpago.la/12ho2db', '_blank');
-    }, 600);
+    const win2 = window.open('https://mpago.la/12ho2db', '_blank');
+    if (!win2) { window.location.href = 'https://mpago.la/12ho2db'; }
   }
 
   // Counter animation
@@ -2128,3 +2126,4 @@
 </script>
 </body>
 </html>
+
