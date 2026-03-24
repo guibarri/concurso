@@ -1217,6 +1217,65 @@
   }
   .footer-bottom p { color: var(--muted); font-size: 0.74rem; font-family: 'Fira Code', monospace; }
 
+  /* === CITY PHOTO CARDS === */
+  .prize-card.has-photo {
+    padding: 0; overflow: hidden;
+  }
+  .city-photo {
+    width: 100%; height: 200px;
+    object-fit: cover; display: block;
+    transition: transform 0.5s ease;
+    filter: brightness(0.85);
+  }
+  .prize-card.has-photo:hover .city-photo {
+    transform: scale(1.06);
+    filter: brightness(1);
+  }
+  .city-photo-overlay {
+    position: absolute; top: 0; left: 0; right: 0; height: 200px;
+    background: linear-gradient(to bottom, transparent 40%, rgba(10,4,28,0.92) 100%);
+    pointer-events: none; z-index: 1;
+  }
+  .city-photo-label {
+    position: absolute; top: 12px; left: 14px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 0.12em;
+    color: #fff; background: rgba(255,77,0,0.85);
+    padding: 3px 10px; z-index: 2;
+    clip-path: polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
+  }
+  .card-body-pad { padding: 28px 32px 32px; }
+
+  /* === sorteo BADGE HERO === */
+  .sorteo-badge-strip {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, rgba(255,77,0,0.15), rgba(232,0,111,0.1));
+    border: 1px solid rgba(255,77,0,0.4);
+    padding: 12px 24px; margin-bottom: 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 0.14em; color: var(--fire);
+    animation: fadeUp 0.7s 0.05s ease both;
+  }
+  .sorteo-num {
+    font-family: 'Fira Code', monospace; font-size: 0.72rem;
+    background: var(--grad-main); color: #fff;
+    padding: 3px 10px; letter-spacing: 0.1em;
+  }
+
+  /* Hero visual with destination collage */
+  .hero-collage {
+    position: absolute; top: 80px; right: -20px; z-index: 1;
+    width: min(45vw, 580px); height: 480px;
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 6px; opacity: 0.6; pointer-events: none;
+    mask-image: linear-gradient(to left, black 30%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, black 30%, transparent 100%);
+  }
+  .hero-collage img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: saturate(1.2) contrast(1.05);
+  }
+  .hero-collage img:first-child { grid-row: span 2; }
+
   /* === SCROLLBAR === */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1259,21 +1318,21 @@
     <li><a href="#como">¿Cómo funciona?</a></li>
     <li><a href="#ganadores">Ganadores</a></li>
   </ul>
-  <button class="nav-cta" onclick="openModal('Viaje por Europa 21 días', 4990)">Comprar tickets</button>
+  <a href="#checkout" class="nav-cta" style="text-decoration:none;display:inline-block;">COMPRAR TICKETS</a>
 </nav>
 
 <!-- TICKER -->
 <div class="ticker" style="margin-top:72px">
   <div class="ticker-inner">
-    <span class="ticker-item">✈ Gran Sorteo Internacional 2025 <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🎟️ Gran sorteo de Viaje a Europa 2025 <span class="ticker-dot"></span></span>
     <span class="ticker-item">🌍 21 días por Europa <span class="ticker-dot"></span></span>
-    <span class="ticker-item">🏛️ 5 ciudades Patrimonio de la Humanidad <span class="ticker-dot"></span></span>
-    <span class="ticker-item">🏆 Sorteo certificado ante notario <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🏛️ Barcelona · Madrid · París · Roma · Venecia <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🏆 sorteo certificada ante notario público <span class="ticker-dot"></span></span>
     <span class="ticker-item">🗓️ Sorteo: 21 de enero de 2026 <span class="ticker-dot"></span></span>
-    <span class="ticker-item">✈ Gran Sorteo Internacional 2025 <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🎟️ Gran sorteo de Viaje a Europa 2025 <span class="ticker-dot"></span></span>
     <span class="ticker-item">🌍 21 días por Europa <span class="ticker-dot"></span></span>
-    <span class="ticker-item">🏛️ 5 ciudades Patrimonio de la Humanidad <span class="ticker-dot"></span></span>
-    <span class="ticker-item">🏆 Sorteo certificado ante notario <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🏛️ Barcelona · Madrid · París · Roma · Venecia <span class="ticker-dot"></span></span>
+    <span class="ticker-item">🏆 sorteo certificada ante notario público <span class="ticker-dot"></span></span>
     <span class="ticker-item">🗓️ Sorteo: 21 de enero de 2026 <span class="ticker-dot"></span></span>
   </div>
 </div>
@@ -1282,16 +1341,21 @@
 <section class="hero">
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
+  <div class="hero-collage" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=600&q=80" alt="Barcelona" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&q=80" alt="París" loading="lazy">
+    <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&q=80" alt="Roma" loading="lazy">
+  </div>
   <div class="hero-content">
-    <div class="hero-badge">Sorteo activo — quedan 847 tickets</div>
+    <div class="hero-badge">🎟️ sorteo activa — quedan 847 tickets</div>
     <h1>
-      GANA
-      <span class="line2">TECH</span>
-      <span class="line3">ÉPICO.</span>
+      sorteo DE
+      <span class="line2">VIAJE</span>
+      <span class="line3">EUROPA.</span>
     </h1>
-    <p class="hero-sub">Participa en sorteos de tecnología de primer nivel. Procesos auditables, transmisión en vivo y premios reales. Solo necesitas un ticket.</p>
+    <p class="hero-sub">Compra tu número y participa en la gran <strong style="color:var(--fire)">sorteo de viaje a Europa</strong>. 21 días · 5 ciudades · vuelos + hoteles 4★ todo incluido. Sorteo certificado ante notario el 21 de enero.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="openModal('MacBook Pro 16&quot; M3 Max', 4990)">→ COMPRAR TICKETS AHORA</button>
+      <a href="#checkout" class="btn-primary" style="text-decoration:none;display:inline-block;">🎟️ COMPRAR MI NÚMERO AHORA</a>
       <a href="#como" class="btn-ghost">¿Cómo funciona? <span class="arrow">→</span></a>
     </div>
     <div class="hero-pay-note">
@@ -1328,14 +1392,55 @@
   </div>
 
   <div class="prize-hero-card">
-    <div class="prize-hero-visual">
-      <span class="prize-corner-tag">✈ Exclusivo</span>
-      <span class="prize-icon-big">🗼</span>
+    <div class="prize-hero-visual" style="padding:0;overflow:hidden;position:relative;min-height:520px;">
+
+      <!-- CARRUSEL AUTOMÁTICO -->
+      <div id="cityCarousel" style="position:absolute;inset:0;z-index:0;">
+        <div class="carousel-slide active" style="position:absolute;inset:0;transition:opacity 1.2s ease;">
+          <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=900&q=85" alt="París" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.65) saturate(1.2);">
+        </div>
+        <div class="carousel-slide" style="position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;">
+          <img src="https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=900&q=85" alt="Barcelona" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.65) saturate(1.2);">
+        </div>
+        <div class="carousel-slide" style="position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;">
+          <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=900&q=85" alt="Roma" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.65) saturate(1.2);">
+        </div>
+        <div class="carousel-slide" style="position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;">
+          <img src="https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=900&q=85" alt="Venecia" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.65) saturate(1.2);">
+        </div>
+        <div class="carousel-slide" style="position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease;">
+          <img src="https://images.unsplash.com/photo-1543785734-4b6e564642f8?w=900&q=85" alt="Madrid" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.65) saturate(1.2);">
+        </div>
+      </div>
+
+      <!-- Miniaturas clicables -->
+      <div style="position:absolute;bottom:16px;left:16px;display:flex;gap:8px;z-index:3;">
+        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=200&q=75" alt="París"     onclick="goSlide(0)" class="thumb-img" id="thumb0" style="width:80px;height:60px;object-fit:cover;cursor:pointer;border:2px solid var(--fire);opacity:1;transition:all 0.3s;">
+        <img src="https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=200&q=75" alt="Barcelona" onclick="goSlide(1)" class="thumb-img" id="thumb1" style="width:80px;height:60px;object-fit:cover;cursor:pointer;border:2px solid rgba(255,77,0,0.3);opacity:0.6;transition:all 0.3s;">
+        <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=200&q=75" alt="Roma"       onclick="goSlide(2)" class="thumb-img" id="thumb2" style="width:80px;height:60px;object-fit:cover;cursor:pointer;border:2px solid rgba(255,77,0,0.3);opacity:0.6;transition:all 0.3s;">
+        <img src="https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=200&q=75" alt="Venecia"  onclick="goSlide(3)" class="thumb-img" id="thumb3" style="width:80px;height:60px;object-fit:cover;cursor:pointer;border:2px solid rgba(255,77,0,0.3);opacity:0.6;transition:all 0.3s;">
+        <img src="https://images.unsplash.com/photo-1543785734-4b6e564642f8?w=200&q=75" alt="Madrid"     onclick="goSlide(4)" class="thumb-img" id="thumb4" style="width:80px;height:60px;object-fit:cover;cursor:pointer;border:2px solid rgba(255,77,0,0.3);opacity:0.6;transition:all 0.3s;">
+      </div>
+
+      <!-- Nombre ciudad actual -->
+      <div id="cityLabel" style="position:absolute;bottom:90px;left:16px;z-index:3;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.2em;color:#fff;background:rgba(255,77,0,0.8);padding:4px 14px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:opacity 0.4s;">
+        ✈ PARÍS
+      </div>
+
+      <span class="prize-corner-tag">🎟️ Sorteo de Viaje</span>
+      <!-- overlays -->
+      <div style="position:absolute;inset:0;background:linear-gradient(to right, transparent 60%, rgba(20,8,40,0.95) 100%);z-index:1;pointer-events:none;"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(10,5,20,0.7) 0%, transparent 60%);z-index:1;pointer-events:none;"></div>
+      <!-- Título flotante -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;text-align:center;pointer-events:none;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:4rem;line-height:0.9;color:#fff;text-shadow:0 0 40px rgba(255,77,0,0.8);letter-spacing:0.04em;">21 DÍAS<br>5 CIUDADES</div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.7rem;color:rgba(255,200,100,0.9);letter-spacing:0.2em;margin-top:12px;">✈ BARCELONA · MADRID · París · ROMA · VENECIA</div>
+      </div>
     </div>
     <div class="prize-hero-info">
       <div>
-        <h3 class="prize-name">Viaje de Ensueño<br>por Europa</h3>
-        <p class="prize-desc">21 días · 5 ciudades Patrimonio de la Humanidad · Barcelona · Madrid · París · Roma · Venecia. Hoteles 4★, vuelos internacionales, guías certificados y más de 20 entradas incluidas.</p>
+        <h3 class="prize-name">🎟️ Gran sorteo de Viaje<br>por Europa</h3>
+        <p class="prize-desc">Compra tu número y gana 21 días · 5 ciudades Patrimonio de la Humanidad · Barcelona · Madrid · París · Roma · Venecia. Hoteles 4★, vuelos internacionales, guías certificados y más de 20 entradas incluidas.</p>
 
         <div class="prize-specs">
           <div class="spec-item">
@@ -1381,14 +1486,9 @@
           </div>
         </div>
 
-        <div class="ticket-selector">
-          <button class="ticket-opt active" onclick="selectTickets(this, 1)">x1 — $4.990</button>
-        </div>
-      </div>
-
-      <button class="buy-btn" onclick="buyFeatured()">
-        COMPRAR 1 TICKET — $4.990
-      </button>
+      <a href="#checkout" class="buy-btn" style="text-decoration:none;display:block;text-align:center;">
+        ✈ COMPRAR TICKET — $4.990 → IR AL CHECKOUT
+      </a>
     </div>
   </div>
 </section>
@@ -1401,71 +1501,158 @@
   </div>
 
   <div class="grid-3" style="grid-template-columns: repeat(3,1fr)">
-    <div class="prize-card">
-      <span class="card-icon">🇪🇸</span>
-      <h3 class="card-title">Barcelona · Días 1–4</h3>
-      <p class="card-desc">Sagrada Família, Parque Güell, Casa Batlló, excursión a Montserrat y paseo por el Barrio Gótico. Hotel Barceló Raval 4★.</p>
-      <div class="card-footer">
-        <div class="card-price">4 noches<small>3–6 Feb</small></div>
-        <div class="card-slots"><span class="slots-num">5+</span><span class="slots-lbl">atracciones incluidas</span></div>
+
+    <!-- BARCELONA -->
+    <div class="prize-card has-photo" onclick="window.location.href='#checkout'">
+      <div style="position:relative;overflow:hidden;">
+        <img class="city-photo" src="https://images.unsplash.com/photo-1511527661048-7fe73d85e9a4?w=700&q=80" alt="Barcelona" loading="lazy">
+        <div class="city-photo-overlay"></div>
+        <span class="city-photo-label">🇪🇸 BARCELONA</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="card-body-pad">
+        <h3 class="card-title">Barcelona · Días 1–4</h3>
+        <p class="card-desc">La ciudad de Gaudí: <strong>Sagrada Família</strong>, <strong>Parque Güell</strong>, <strong>Casa Batlló</strong> y el modernismo catalán. Barrio Gótico medieval, mercado de La Boqueria y Paseo de Gracia. Excursión completa a <strong>Montserrat</strong>, montaña sagrada con vistas espectaculares.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏛️ Sagrada Família</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🌿 Parque Güell</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏠 Casa Batlló</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">⛰️ Montserrat</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🍷 Barrio Gótico</span>
+        </div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🏨 Hotel Barceló Raval 4★ · Desayuno incluido · WiFi</div>
+        <div class="card-footer">
+          <div class="card-price">4 noches<small>3–6 Feb 2026</small></div>
+          <div class="card-slots"><span class="slots-num">5+</span><span class="slots-lbl">atracciones incluidas</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="prize-card">
-      <span class="card-icon">🇪🇸</span>
-      <h3 class="card-title">Madrid · Días 5–8</h3>
-      <p class="card-desc">Prado, Reina Sofía, Thyssen, Palacio Real y excursión a Toledo Patrimonio de la Humanidad. Hotel NH Collection Gran Vía 4★.</p>
-      <div class="card-footer">
-        <div class="card-price">4 noches<small>7–10 Feb</small></div>
-        <div class="card-slots"><span class="slots-num">6+</span><span class="slots-lbl">museos incluidos</span></div>
+    <!-- MADRID -->
+    <div class="prize-card has-photo" onclick="window.location.href='#checkout'">
+      <div style="position:relative;overflow:hidden;">
+        <img class="city-photo" src="https://images.unsplash.com/photo-1543785734-4b6e564642f8?w=700&q=80" alt="Madrid" loading="lazy">
+        <div class="city-photo-overlay"></div>
+        <span class="city-photo-label">🇪🇸 MADRID</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="card-body-pad">
+        <h3 class="card-title">Madrid · Días 5–8</h3>
+        <p class="card-desc">La capital española: <strong>Museo del Prado</strong> (Velázquez, Goya, Rembrandt), <strong>Reina Sofía</strong> con el Guernica, <strong>Thyssen-Bornemisza</strong> y el <strong>Palacio Real</strong>. Excursión a <strong>Toledo</strong>, ciudad Patrimonio UNESCO con catedral gótica y judería medieval.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🖼️ Museo del Prado</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">👑 Palacio Real</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🎨 Reina Sofía</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏰 Toledo UNESCO</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🌆 Gran Vía</span>
+        </div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🏨 Hotel NH Collection Gran Vía 4★ · Desayuno incluido · WiFi</div>
+        <div class="card-footer">
+          <div class="card-price">4 noches<small>7–10 Feb 2026</small></div>
+          <div class="card-slots"><span class="slots-num">6+</span><span class="slots-lbl">museos incluidos</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="prize-card">
-      <span class="card-icon">🇫🇷</span>
-      <h3 class="card-title">París · Días 9–12</h3>
-      <p class="card-desc">Torre Eiffel nocturna, Louvre, Versalles, Orsay, Montmartre y crucero por el Sena. Hotel Le Petit Paris 4★.</p>
-      <div class="card-footer">
-        <div class="card-price">4 noches<small>11–14 Feb</small></div>
-        <div class="card-slots"><span class="slots-num">7+</span><span class="slots-lbl">entradas incluidas</span></div>
+    <!-- PARÍS -->
+    <div class="prize-card has-photo" onclick="window.location.href='#checkout'">
+      <div style="position:relative;overflow:hidden;">
+        <img class="city-photo" src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=700&q=80" alt="París" loading="lazy">
+        <div class="city-photo-overlay"></div>
+        <span class="city-photo-label">🇫🇷 PARÍS</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="card-body-pad">
+        <h3 class="card-title">París · Días 9–12</h3>
+        <p class="card-desc">La ciudad de la luz: <strong>Torre Eiffel nocturna</strong>, <strong>Louvre</strong> (Mona Lisa, Venus de Milo), jardines de <strong>Versalles</strong>, bohemio <strong>Montmartre</strong> y Museo d'Orsay. Cierra con un romántico <strong>crucero por el Sena</strong> con vistas iluminadas.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🗼 Torre Eiffel</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🖼️ Museo del Louvre</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏰 Versalles</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">⛪ Montmartre</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🚢 Crucero Sena</span>
+        </div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🏨 Hotel Le Petit Paris 4★ · Desayuno incluido · WiFi</div>
+        <div class="card-footer">
+          <div class="card-price">4 noches<small>11–14 Feb 2026</small></div>
+          <div class="card-slots"><span class="slots-num">7+</span><span class="slots-lbl">entradas incluidas</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="prize-card">
-      <span class="card-icon">🇮🇹</span>
-      <h3 class="card-title">Roma · Días 13–16</h3>
-      <p class="card-desc">Coliseo, Museos Vaticanos, Capilla Sixtina, Fontana di Trevi y Piazza Navona. Hotel Nazionale Roma 4★.</p>
-      <div class="card-footer">
-        <div class="card-price">4 noches<small>15–18 Feb</small></div>
-        <div class="card-slots"><span class="slots-num">6+</span><span class="slots-lbl">sitios históricos</span></div>
+    <!-- ROMA -->
+    <div class="prize-card has-photo" onclick="window.location.href='#checkout'">
+      <div style="position:relative;overflow:hidden;">
+        <img class="city-photo" src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=700&q=80" alt="Roma" loading="lazy">
+        <div class="city-photo-overlay"></div>
+        <span class="city-photo-label">🇮🇹 ROMA</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="card-body-pad">
+        <h3 class="card-title">Roma · Días 13–16</h3>
+        <p class="card-desc">La Ciudad Eterna: el <strong>Coliseo</strong> y Foro Romano, <strong>Museos Vaticanos</strong> y <strong>Capilla Sixtina</strong> de Miguel Ángel, la <strong>Fontana di Trevi</strong> (lanza tu moneda), <strong>Piazza Navona</strong> y el Panteón. Tiempo libre para gelato y pasta auténtica italiana.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏛️ Coliseo Romano</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">⛪ Vaticano</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🎨 Capilla Sixtina</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">⛲ Fontana di Trevi</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏟️ Panteón</span>
+        </div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🏨 Hotel Nazionale Roma 4★ · Desayuno incluido · WiFi</div>
+        <div class="card-footer">
+          <div class="card-price">4 noches<small>15–18 Feb 2026</small></div>
+          <div class="card-slots"><span class="slots-num">6+</span><span class="slots-lbl">sitios históricos</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="prize-card">
-      <span class="card-icon">🇮🇹</span>
-      <h3 class="card-title">Venecia · Días 17–21</h3>
-      <p class="card-desc">Palacio Ducal, Murano, Burano, Torcello y góndola nocturna con serenata veneciana. Hotel Ai Reali di Venezia 4★.</p>
-      <div class="card-footer">
-        <div class="card-price">5 noches<small>19–23 Feb</small></div>
-        <div class="card-slots"><span class="slots-num">5+</span><span class="slots-lbl">excursiones incluidas</span></div>
+    <!-- VENECIA -->
+    <div class="prize-card has-photo" onclick="window.location.href='#checkout'">
+      <div style="position:relative;overflow:hidden;">
+        <img class="city-photo" src="https://images.unsplash.com/photo-1514890547357-a9ee288728e0?w=700&q=80" alt="Venecia" loading="lazy">
+        <div class="city-photo-overlay"></div>
+        <span class="city-photo-label">🇮🇹 VENECIA</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="card-body-pad">
+        <h3 class="card-title">Venecia · Días 17–21</h3>
+        <p class="card-desc">La ciudad de los canales: <strong>Plaza San Marcos</strong> y <strong>Palacio Ducal</strong>, Puente de los Suspiros y <strong>Puente de Rialto</strong>. Excursión a <strong>Murano</strong> (vidrio soplado), <strong>Burano</strong> (casas de colores) y <strong>Torcello</strong>. Cierra con una mágica <strong>góndola nocturna con serenata</strong>.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🎭 Plaza San Marcos</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🏛️ Palacio Ducal</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🔮 Isla Murano</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🌈 Isla Burano</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.25);color:var(--muted2);padding:3px 9px;">🚣 Góndola Nocturna</span>
+        </div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:12px;">🏨 Hotel Ai Reali di Venezia 4★ · Desayuno incluido · WiFi</div>
+        <div class="card-footer">
+          <div class="card-price">5 noches<small>19–23 Feb 2026</small></div>
+          <div class="card-slots"><span class="slots-num">5+</span><span class="slots-lbl">excursiones incluidas</span></div>
+        </div>
+      </div>
     </div>
 
-    <div class="prize-card">
-      <span class="card-icon">✈</span>
-      <h3 class="card-title">Todo incluido</h3>
-      <p class="card-desc">Vuelos internacionales Chile ↔ Europa, trenes AVE/Thalys/Frecciarossa, traslados privados, desayunos y seguro de viaje 24/7.</p>
-      <div class="card-footer">
-        <div class="card-price">21 días<small>3–23 Feb 2025</small></div>
-        <div class="card-slots"><span class="slots-num">100%</span><span class="slots-lbl">certificado notario</span></div>
+    <!-- TODO INCLUIDO -->
+    <div class="prize-card has-photo" onclick="window.location.href='#checkout'">
+      <div style="position:relative;overflow:hidden;">
+        <img class="city-photo" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=700&q=80" alt="vuelo" loading="lazy">
+        <div class="city-photo-overlay"></div>
+        <span class="city-photo-label">✈ TODO INCLUIDO</span>
       </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      <div class="card-body-pad">
+        <h3 class="card-title">Todo incluido — Sin sorpresas</h3>
+        <p class="card-desc">El ganador recibe el paquete completo: <strong>vuelos internacionales</strong> Santiago ↔ Barcelona/Venecia, todos los <strong>trenes de alta velocidad</strong> entre ciudades (AVE, Thalys, Frecciarossa), <strong>traslados privados</strong> aeropuerto–hotel, <strong>desayunos diarios</strong> y <strong>seguro médico 24/7</strong>.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;">
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.3);color:var(--ice);padding:3px 9px;">✈ Vuelos internacionales</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.3);color:var(--ice);padding:3px 9px;">🚄 Trenes AVE / Thalys</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.3);color:var(--ice);padding:3px 9px;">🚗 Traslados privados</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.3);color:var(--ice);padding:3px 9px;">🍳 Desayunos diarios</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.3);color:var(--ice);padding:3px 9px;">🛡️ Seguro médico 24/7</span>
+          <span style="font-size:0.68rem;font-family:'Fira Code',monospace;background:rgba(0,102,255,0.1);border:1px solid rgba(0,102,255,0.3);color:var(--ice);padding:3px 9px;">🧳 Guías certificados</span>
+        </div>
+        <div style="font-family:'Fira Code',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:12px;">📋 Sorteo certificado ante notario público · Transmisión en vivo</div>
+        <div class="card-footer">
+          <div class="card-price">21 días<small>3–23 Feb 2026</small></div>
+          <div class="card-slots"><span class="slots-num">100%</span><span class="slots-lbl">certificado notario</span></div>
+        </div>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -1530,8 +1717,8 @@
   </div>
 </section>
 
-<!-- WINNERS -->
-<section class="winners" id="ganadores">
+<!-- WINNERS REMOVED -->
+<section class="winners" id="ganadores" style="display:none">
   <div class="section-header">
     <h2 class="section-title">Últimos <span>ganadores</span></h2>
     <span class="section-tag">// sorteos verificados</span>
@@ -1652,28 +1839,11 @@
         </div>
       </div>
 
-      <button class="btn-club" onclick="openModal('MacBook Pro 16&quot; M3 Max', 4990)">★ UNIRME AL CLUB</button>
+      <button class="btn-club" onclick="window.location.href='#checkout'">★ UNIRME AL CLUB</button>
     </div>
 
-    <div class="club-tiers">
-      <div class="tier-card">
-        <div class="tier-header">
-          <span class="tier-icon">🥈</span>
-          <span class="tier-name">Silver</span>
-          <div class="tier-price">
-            <span class="tier-price-val">$4.990</span>
-            <span class="tier-price-lbl">/ mes</span>
-          </div>
-        </div>
-        <div class="tier-features">
-          <span class="tier-feat active">✓ 10% descuento</span>
-          <span class="tier-feat active">✓ Acceso anticipado 12h</span>
-          <span class="tier-feat">✗ Sorteos exclusivos</span>
-          <span class="tier-feat">✗ Dashboard VIP</span>
-        </div>
-      </div>
-
-      <div class="tier-card featured-tier">
+    <div class="club-tiers" style="justify-content:center;">
+      <div class="tier-card featured-tier" style="max-width:420px;width:100%;">
         <div class="tier-header">
           <span class="tier-icon">🥇</span>
           <span class="tier-name">Gold</span>
@@ -1683,25 +1853,8 @@
           </div>
         </div>
         <div class="tier-features">
-          <span class="tier-feat active">✓ 20% descuento</span>
+          <span class="tier-feat active">✓ 20% descuento en sorteos</span>
           <span class="tier-feat active">✓ Acceso anticipado 24h</span>
-          <span class="tier-feat active">✓ Sorteos exclusivos</span>
-          <span class="tier-feat">✗ Dashboard VIP</span>
-        </div>
-      </div>
-
-      <div class="tier-card">
-        <div class="tier-header">
-          <span class="tier-icon">💎</span>
-          <span class="tier-name">Diamond</span>
-          <div class="tier-price">
-            <span class="tier-price-val">$19.990</span>
-            <span class="tier-price-lbl">/ mes</span>
-          </div>
-        </div>
-        <div class="tier-features">
-          <span class="tier-feat active">✓ 30% descuento</span>
-          <span class="tier-feat active">✓ Acceso anticipado 48h</span>
           <span class="tier-feat active">✓ Sorteos exclusivos</span>
           <span class="tier-feat active">✓ Dashboard VIP completo</span>
         </div>
@@ -1714,9 +1867,9 @@
 <section class="cta-final">
   <h2 class="cta-title">Tu próximo<br><span>viaje te espera.</span></h2>
   <p class="cta-sub">21 días por Europa, 5 ciudades patrimonio, hoteles 4★. Un sorteo certificado ante notario. Solo necesitas un ticket.</p>
-  <button class="btn-primary" onclick="document.getElementById('checkout').scrollIntoView({behavior:'smooth'})" style="font-size:1.05rem; padding: 20px 48px; clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%)">
+  <a href="#checkout" class="btn-primary" style="text-decoration:none;display:inline-block;font-size:1.05rem;padding:20px 48px;clip-path:polygon(16px 0%,100% 0%,calc(100% - 16px) 100%,0% 100%)">
     → IR AL CHECKOUT
-  </button>
+  </a>
 </section>
 
 <!-- PAYMENT MODAL — FUTURISTIC -->
@@ -1855,18 +2008,18 @@
         <div class="checkout-step-label">// paso 02</div>
         <div class="checkout-step-title" style="font-size:1.2rem;margin-bottom:16px">Método de pago</div>
         <div class="checkout-methods">
-          <div class="checkout-method selected" onclick="selectMethod(this)">
+          <div class="checkout-method selected" onclick="selectMethod(this,'mp')">
             <span class="method-icon">💳</span>
             <div class="method-info">
               <div class="method-name">MercadoPago</div>
               <div class="method-desc">Tarjeta de crédito, débito o prepago — todos los bancos</div>
             </div>
           </div>
-          <div class="checkout-method" onclick="selectMethod(this)">
+          <div class="checkout-method" onclick="selectMethod(this,'transfer')">
             <span class="method-icon">🏦</span>
             <div class="method-info">
               <div class="method-name">Transferencia bancaria</div>
-              <div class="method-desc">Cuenta Banco Estado o Santander — confirmación en 2h</div>
+              <div class="method-desc">Depósito directo a cuenta — confirmación en 2h</div>
             </div>
           </div>
         </div>
@@ -1927,7 +2080,25 @@
           <div class="co-trust-badge"><span class="icon">📧</span> Ticket instantáneo</div>
           <div class="co-trust-badge"><span class="icon">🛡️</span> Pago protegido</div>
         </div>
-        <button class="co-pay-btn" onclick="checkoutPay()">
+
+        <!-- Datos transferencia (oculto por defecto) -->
+        <div id="transferInfo" style="display:none; background:rgba(0,102,255,0.07); border:1px solid rgba(0,102,255,0.3); border-left:3px solid var(--cobalt); padding:20px 22px; margin-bottom:16px;">
+          <div style="font-family:'Bebas Neue',sans-serif; font-size:0.85rem; letter-spacing:0.14em; color:var(--ice); margin-bottom:14px;">🏦 DATOS DE TRANSFERENCIA</div>
+          <div style="display:grid; gap:8px; font-family:'Fira Code',monospace; font-size:0.78rem; color:var(--muted2);">
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:6px;"><span style="color:var(--muted)">Banco</span><span style="color:var(--text)">MercadoPago</span></div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:6px;"><span style="color:var(--muted)">Tipo</span><span style="color:var(--text)">Cuenta Vista</span></div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:6px;"><span style="color:var(--muted)">N° Cuenta</span><span style="color:var(--text); cursor:pointer;" onclick="navigator.clipboard.writeText('1064283585')">1064283585 📋</span></div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:6px;"><span style="color:var(--muted)">RUT</span><span style="color:var(--text); cursor:pointer;" onclick="navigator.clipboard.writeText('20.451.932-3')">20.451.932-3 📋</span></div>
+            <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:6px;"><span style="color:var(--muted)">Titular</span><span style="color:var(--text)">Mabel Villegas</span></div>
+            <div style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Email</span><span style="color:var(--text)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="640905060108120d080801030517515251240309050d084a070b09">[email&#160;protected]</a></span></div>
+          </div>
+          <div style="margin-top:14px; font-size:0.72rem; color:var(--muted); font-family:'Fira Code',monospace; line-height:1.6;">
+            ⚠️ Una vez realizada la transferencia, envía el comprobante a <span style="color:var(--ice)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="523f3330373e243b3e3e3735332167646712353f333b3e7c313d3f">[email&#160;protected]</a></span> con tu nombre para recibir tu número de sorteo.
+          </div>
+        </div>
+
+        <!-- Botón MercadoPago -->
+        <button class="co-pay-btn" id="btnMercadoPago" onclick="checkoutPay()">
           <div class="co-pay-btn-inner">
             <div class="co-pay-left">
               <span class="co-mp-badge">MERCADO PAGO</span>
@@ -1937,7 +2108,20 @@
           </div>
           <div class="co-scan-line"></div>
         </button>
-        <p class="co-note">Serás redirigido al portal seguro de MercadoPago para completar el pago.</p>
+
+        <!-- Botón Transferencia -->
+        <button class="co-pay-btn" id="btnTransfer" style="display:none; background:linear-gradient(135deg,var(--cobalt),var(--ice));" onclick="checkoutTransfer()">
+          <div class="co-pay-btn-inner">
+            <div class="co-pay-left">
+              <span class="co-mp-badge" style="background:rgba(255,255,255,0.2);">TRANSFERENCIA</span>
+              <span class="co-pay-action">VER DATOS →</span>
+            </div>
+            <span class="co-pay-amount" id="checkoutTransferAmount">$4.990</span>
+          </div>
+          <div class="co-scan-line"></div>
+        </button>
+
+        <p class="co-note" id="coNote">Serás redirigido al portal seguro de MercadoPago para completar el pago.</p>
       </div>
 
     </div>
@@ -1983,7 +2167,12 @@
   <p style="color: var(--accent); font-size: 0.7rem; letter-spacing: 0.1em;">RUT: XX.XXX.XXX-X — CHILE</p>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  function goCheckout() {
+    const el = document.getElementById('checkout');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   // Countdown
   const targetDate = new Date('2026-01-21T18:00:00').getTime();
   function updateCountdown() {
@@ -2058,11 +2247,16 @@
     document.getElementById('modalFormView').style.display = 'none';
     document.getElementById('modalSuccess').style.display = 'block';
     document.getElementById('successEmail').textContent = email;
-    const win1 = window.open('https://mpago.la/12ho2db', '_blank');
-    if (!win1) { window.location.href = 'https://mpago.la/12ho2db'; }
+    // Registrar en panel admin
+    if (window.voltexRegistrarComprador) window.voltexRegistrarComprador(name, '', email, 'MercadoPago');
+    else { try { const d=JSON.parse(localStorage.getItem('voltex_compradores')||'[]'); d.push({id:Date.now(),nombre:name,apellido:'',email,ticket:String(d.length+1).padStart(4,'0'),monto:4990,metodo:'MercadoPago',fecha:new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}); localStorage.setItem('voltex_compradores',JSON.stringify(d)); } catch(e){} }
+    const win1 = window.open('https://mpago.la/2UvKMw3', '_blank');
+    if (!win1) { window.location.href = 'https://mpago.la/2UvKMw3'; }
   }
 
   // Checkout
+  let currentPayMethod = 'mp';
+
   function selectCheckoutPrize(el, name, unit, total) {
     document.querySelectorAll('.checkout-prize-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
@@ -2070,11 +2264,24 @@
     document.getElementById('checkoutSummaryUnit').textContent  = fmt(unit);
     document.getElementById('checkoutSummaryTotal').textContent = fmt(unit);
     document.getElementById('checkoutWebpayAmount').textContent = fmt(unit);
+    document.getElementById('checkoutTransferAmount').textContent = fmt(unit);
   }
 
-  function selectMethod(el) {
+  function selectMethod(el, method) {
     document.querySelectorAll('.checkout-method').forEach(m => m.classList.remove('selected'));
     el.classList.add('selected');
+    currentPayMethod = method;
+    if (method === 'transfer') {
+      document.getElementById('btnMercadoPago').style.display = 'none';
+      document.getElementById('btnTransfer').style.display = 'block';
+      document.getElementById('transferInfo').style.display = 'block';
+      document.getElementById('coNote').textContent = 'Envía el comprobante a mabelvillegas565@gmail.com con tu nombre para recibir tu número.';
+    } else {
+      document.getElementById('btnMercadoPago').style.display = 'block';
+      document.getElementById('btnTransfer').style.display = 'none';
+      document.getElementById('transferInfo').style.display = 'none';
+      document.getElementById('coNote').textContent = 'Serás redirigido al portal seguro de MercadoPago para completar el pago.';
+    }
   }
 
   function checkoutPay() {
@@ -2086,10 +2293,19 @@
       document.getElementById('coName').scrollIntoView({behavior:'smooth', block:'center'});
       return;
     }
-    const btn = document.querySelector('#checkout .co-pay-btn');
+    const btn = document.getElementById('btnMercadoPago');
     btn.querySelector('.co-pay-action').textContent = 'REDIRIGIENDO... →';
-    const win2 = window.open('https://mpago.la/12ho2db', '_blank');
-    if (!win2) { window.location.href = 'https://mpago.la/12ho2db'; }
+    // Registrar en panel admin
+    const coName2 = document.getElementById('coName').value.trim();
+    const coLast  = document.getElementById('coLastName')?.value.trim() || '';
+    const coEmail2 = document.getElementById('coEmail').value.trim();
+    try { const d=JSON.parse(localStorage.getItem('voltex_compradores')||'[]'); d.push({id:Date.now(),nombre:coName2,apellido:coLast,email:coEmail2,ticket:String(d.length+1).padStart(4,'0'),monto:4990,metodo:'MercadoPago',fecha:new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}); localStorage.setItem('voltex_compradores',JSON.stringify(d)); } catch(e){}
+    const win2 = window.open('https://mpago.la/2UvKMw3', '_blank');
+    if (!win2) { window.location.href = 'https://mpago.la/2UvKMw3'; }
+  }
+
+  function checkoutTransfer() {
+    document.getElementById('transferInfo').scrollIntoView({behavior:'smooth', block:'center'});
   }
 
   // Counter animation
@@ -2112,17 +2328,40 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-target]').forEach(function(el) { observer.observe(el); });
 
-  // Winners filter
-  function filterWinners(tab, cat) {
-    document.querySelectorAll('.wtab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    document.querySelectorAll('.winner-row').forEach(function(row) {
-      row.style.display = (cat === 'all' || row.dataset.cat === cat) ? '' : 'none';
-    });
+  // ===== CARRUSEL DE CIUDADES =====
+  const cityNames = ['✈ PARÍS', '✈ BARCELONA', '✈ ROMA', '✈ VENECIA', '✈ MADRID'];
+  let currentSlide = 0;
+  let carouselTimer = null;
+
+  function goSlide(n) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    if (!slides.length) return;
+    slides[currentSlide].style.opacity = '0';
+    const t0 = document.getElementById('thumb' + currentSlide);
+    if (t0) { t0.style.border = '2px solid rgba(255,77,0,0.3)'; t0.style.opacity = '0.6'; }
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].style.opacity = '1';
+    const t1 = document.getElementById('thumb' + currentSlide);
+    if (t1) { t1.style.border = '2px solid var(--fire)'; t1.style.opacity = '1'; }
+    const lbl = document.getElementById('cityLabel');
+    if (lbl) { lbl.style.opacity = '0'; setTimeout(() => { lbl.textContent = cityNames[currentSlide]; lbl.style.opacity = '1'; }, 300); }
+    clearInterval(carouselTimer);
+    carouselTimer = setInterval(() => goSlide(currentSlide + 1), 3500);
   }
 
-  // Nav checkout link
-  document.querySelector('.nav-links').insertAdjacentHTML('beforeend','<li><a href="#checkout">Checkout</a></li>');
-</script>
-</body>
-</html>
+  function goCheckout() {
+    const el = document.getElementById('checkout');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  window.addEventListener('load', function() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    if (slides.length) {
+      slides.forEach((s, i) => { s.style.opacity = i === 0 ? '1' : '0'; });
+      carouselTimer = setInterval(() => goSlide(currentSlide + 1), 3500);
+    }
+  });
+
+  // Winners filter
+  function filterWinners(tab, cat) {
+    document.querySelectorAll('.wtab').forEach(t => t.classList.remove('active'))
